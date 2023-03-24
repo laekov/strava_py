@@ -1,5 +1,6 @@
 import argparse
 import os.path
+import pandas as pd
 
 
 def main():
@@ -74,6 +75,14 @@ def main():
 
     print("Processing data...")
     df = process_data(args.path)
+    d = df.groupby('name').last()
+    d = d[d['dist'] > 0.3]
+    d['date'] = pd.to_datetime(d['time'])
+    d['hour'] = d['date'].dt.date.astype('str') + d['date'].dt.hour.astype('str')
+    d['name'] = d.index
+    d = d.groupby('hour').last()
+    names = set(d['name'])
+    df = df[df['name'].isin(names)]
 
     activities = None
     if args.activities_path:

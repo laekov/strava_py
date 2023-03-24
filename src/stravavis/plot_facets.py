@@ -9,7 +9,7 @@ def plot_facets(df, output_file = 'plot.png'):
 
     # Compute activity start times (for facet ordering)
     start_times = df.groupby('name').agg({'time': 'min'}).reset_index().sort_values('time')
-    ncol = math.ceil(math.sqrt(len(start_times)))
+    ncol = math.ceil(math.sqrt(len(start_times) * 2))
     
     # Create facets
     p = sns.FacetGrid(
